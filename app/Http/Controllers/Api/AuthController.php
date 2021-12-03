@@ -77,7 +77,6 @@ class AuthController extends Controller
             'name' => 'required|max:60',
             'noTelp' => 'required|digits_between:10,13|regex:/^((08))/|numeric',
             'alamat' => 'required',
-            'email' => ['required','email:rfc,dns', Rule::unique('users')->ignore($id)]
         ]); //membuat rule validasi input
 
         if($validate->fails())
@@ -88,7 +87,6 @@ class AuthController extends Controller
         $user->name = $updateData['name'];
         $user->noTelp = $updateData['noTelp'];
         $user->alamat = $updateData['alamat'];
-        $user->email = $updateData['email'];
 
         if($user->save()){
             return response([
@@ -101,6 +99,23 @@ class AuthController extends Controller
             'message' => 'Update User Failed',
             'data' => null
         ], 400); //return message saat course gagal di edit
+    }
+
+    //show user
+    public function show($id){
+        $user = User::find($id); // mencari data berdasarkan id
+
+        if(!is_null($user)){
+            return response([
+                'message' => 'Retrieve Produk Success',
+                'data' => $user
+            ], 200);
+        } //return data yang ditemukan dalam bentuk json
+
+        return response([
+            'message' => 'Produk Not Found',
+            'data' => null
+        ], 400); //return message data tidak ditemukan
     }
 
 }

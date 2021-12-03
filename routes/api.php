@@ -36,4 +36,5 @@ Route::group(['mideleware' => 'auth:api'], function () {
     Route::put('user_id/{id1}/checkout/{check}', 'Api\CartController@checkout');
     //---------------------------------------------------------------------
     Route::put('user/{id}', 'Api\AuthController@update');
+    Route::get('user/{id}', 'Api\AuthController@show');
 });
