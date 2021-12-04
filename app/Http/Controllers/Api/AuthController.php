@@ -71,7 +71,7 @@ class AuthController extends Controller
                 'data' => null
             ], 404);
         } //return message saat data tidak ditemukan
-
+        
         $updateData = $request->all(); //mengambil semua input dari api client
         $validate = Validator::make($updateData, [
             'name' => 'required|max:60',
@@ -81,8 +81,7 @@ class AuthController extends Controller
 
         if($validate->fails())
             return response(['message' => $validate->errors()], 400); //return error invalid input
-        
-        $updateData['password'] = bcrypt($request->password); //enkripsi password
+
         //mengedit timpa data yang lama dengan data yang baru
         $user->name = $updateData['name'];
         $user->noTelp = $updateData['noTelp'];

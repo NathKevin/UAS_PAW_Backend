@@ -48,6 +48,25 @@ class CartController extends Controller
         ], 400); //return message data tidak ditemukan
     }
 
+    //method untuk mencari data cart sesuai id user dan jika checkout nya masih 0 (search)
+    //ini untuk panggil semua data cart milik user terentu yang belum di checkout cart nya
+    public function search($id1, $id2, $check){
+        $cart = Cart::where('user_id', $id1)->where('produk_id', $id2)->where('checkout', $check)->first(); // mencari data berdasarkan id
+
+        if(!is_null($cart)){
+            return response([
+                'message' => 'Retrieve Cart Success',
+                'data' => $cart
+            ], 200);
+        } //return data yang ditemukan dalam bentuk json
+
+        return response([
+            'message' => 'Cart Not Found',
+            'data' => null
+        ],); //return message data tidak ditemukan
+            // sengaja tidak ada error handling agar return data null dapat dipakai suatu kondisi
+    }
+
     //method untuk menambah 1 data cart baru (create)
     public function store(Request $request){
         $storeData = $request->all(); //mengambil semua input dari api client
@@ -71,9 +90,8 @@ class CartController extends Controller
 
     //method untuk mengubah 1 data cart pada atribut qty dan total harga saja (update)
     //ini untuk edit harga total sama qty aja
-    //kenapa atribut lainnya aku ikut masukin edit juga karena kalo engga entah kmrn eror :'v
-    public function update(Request $request, $id1, $id2){
-        $cart = Cart::where('user_id', $id1)->where('produk_id', $id2)->first(); // mencari data berdasarkan id
+    public function update(Request $request, $id1, $id2, $check){
+        $cart = Cart::where('user_id', $id1)->where('produk_id', $id2)->where('checkout', $check)->first(); // mencari data berdasarkan id
         if(is_null($cart)){
             return response([
                 'message' => 'Cart Not Found',
@@ -83,26 +101,20 @@ class CartController extends Controller
 
         $updateData = $request->all(); //mengambil semua input dari api client
         $validate = Validator::make($updateData, [
-            'user_id' => 'required|numeric',
-            'produk_id' => 'required|numeric',
             'qty' => 'required|numeric',
             'harga_total' => 'required|numeric',
-            'checkout' => 'required|numeric'
         ]); //membuat rule validasi input
 
         if($validate->fails())
             return response(['message' => $validate->errors()], 400); //return error invalid input
 
         //mengedit timpa data yang lama dengan data yang baru
-        $cart->user_id = $updateData['user_id'];
-        $cart->produk_id = $updateData['produk_id'];
         $cart->qty = $updateData['qty'];
         $cart->harga_total = $updateData['harga_total'];
-        $cart->checkout = $updateData['checkout'];
 
         if($cart->save()){
             return response([
-                'message' => 'Update Cart Success',
+                'message' => 'Produk Added One Success',
                 'data' => $cart
             ], 200);
         }// return data yang telah di edit dalam bentuk json
@@ -151,5 +163,29 @@ class CartController extends Controller
             'message' => 'Update Cart Failed',
             'data' => null
         ], 400); //return message saat data gagal di edit
+    }
+
+    //method untuk menghapus 1 data produk (delete)
+    public function destroy($id){
+        $cart = Cart::find($id); //mencari data berdasarkan id
+
+        if(is_null($cart)){
+            return response([
+                'message' => 'Produk Not Found',
+                'data' => null
+            ], 404); 
+        }// return message saat data tidak ditemukan
+
+        if($cart->delete()){
+            return response([
+                'message' => 'Delete Produk Success',
+                'data' => $cart
+            ], 200);
+        }//return message saat berhasil hapus data 
+
+        return response([
+            'message' => 'Delete Produk Failed',
+            'data' => null
+        ], 400); //return message saat gagal hapus data 
     }
 }
