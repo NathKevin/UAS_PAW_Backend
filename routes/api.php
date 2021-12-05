@@ -34,7 +34,7 @@ Route::group(['mideleware' => 'auth:api'], function () {
     //---------------------------------------------------------------------
     Route::get('user_id/{id1}/checkout/{check}', 'Api\CartController@show');
     Route::post('cart', 'Api\CartController@store');
-    Route::post('cart/destroy/{id}', 'Api\CartController@destroy');
+    Route::delete('cart/destroy/{id}', 'Api\CartController@destroy');
     Route::put('user_id/{id1}/produk_id/{id2}/checkout/{check}', 'Api\CartController@update');
     Route::put('user_id/{id1}/checkout/{check}', 'Api\CartController@checkout');
     Route::get('user_id/{id1}/produk_id/{id2}/checkout/{check}', 'Api\CartController@search');

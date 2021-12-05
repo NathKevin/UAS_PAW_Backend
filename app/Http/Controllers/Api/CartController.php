@@ -154,7 +154,7 @@ class CartController extends Controller
 
         if(!is_null($cart)){
             return response([
-                'message' => 'Update Cart Success',
+                'message' => 'Checkout Payment Success',
                 'data' => $cart
             ], 200);
         }// return data yang telah di edit dalam bentuk json
