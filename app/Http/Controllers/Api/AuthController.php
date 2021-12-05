@@ -28,6 +28,7 @@ class AuthController extends Controller
         
         $registrationData['password'] = bcrypt($request->password); //enkripsi password
         $user = User::create($registrationData); // membuat user baru
+        $user->sendApiEmailVerificationNotification();
         return response([
             'message' => 'Register Success',
             'user' => $user
@@ -48,7 +49,7 @@ class AuthController extends Controller
             return response(['message' => 'Invalid Credentials'],401); // return gagal login
 
         $user = Auth::user();
-        if($user->verify == 0)
+        if($user->email_verified_at == null)
             return response(['message' => 'Verify Account First'],401); // return gagal login
 
         $token = $user->createToken('Authentication Token')->accessToken; //generate token

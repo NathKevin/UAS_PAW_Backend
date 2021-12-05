@@ -114,7 +114,7 @@ class CartController extends Controller
 
         if($cart->save()){
             return response([
-                'message' => 'Produk Added One Success',
+                'message' => 'Success',
                 'data' => $cart
             ], 200);
         }// return data yang telah di edit dalam bentuk json

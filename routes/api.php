@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
+Route::get('email/verify/{id}', 'Api\VerificationController@verify')->name('verificationapi.verify');
+Route::get('email/resend', 'Api\VerificationController@resend')->name('verificationapi.resend');
 
 Route::group(['mideleware' => 'auth:api'], function () {
     Route::get('produk', 'Api\ProdukController@index');
