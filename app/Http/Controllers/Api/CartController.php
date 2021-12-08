@@ -45,7 +45,7 @@ class CartController extends Controller
         return response([
             'message' => 'Cart Not Found',
             'data' => null
-        ], 400); //return message data tidak ditemukan
+        ],); //return message data tidak ditemukan
     }
 
     //method untuk mencari data cart sesuai id user dan jika checkout nya masih 0 (search)
@@ -114,7 +114,7 @@ class CartController extends Controller
 
         if($cart->save()){
             return response([
-                'message' => 'Success',
+                'message' => ' Success',
                 'data' => $cart
             ], 200);
         }// return data yang telah di edit dalam bentuk json
